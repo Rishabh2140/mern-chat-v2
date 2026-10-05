@@ -204,9 +204,9 @@ app.post('/register', requireTrustedOrigin, registrationLimiter, async (req, res
   const { username, password } = req.body;
   if (typeof username !== 'string' || typeof password !== 'string'
     || username.trim().length < 3 || username.trim().length > 32
-    || Buffer.byteLength(password, 'utf8') < 12
+    || Buffer.byteLength(password, 'utf8') < 8
     || Buffer.byteLength(password, 'utf8') > 72) {
-    return res.status(400).json({ error: 'Username must be 3-32 characters and password must be 12-72 bytes.' });
+    return res.status(400).json({ error: 'Username must be 3-32 characters and password must be 8-72 bytes.' });
   }
 
   try {
