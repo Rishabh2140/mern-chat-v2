@@ -42,6 +42,8 @@ cd mern-chat
 
 ## Deployment Configuration
 
-Copy `api/.env.example` to `api/.env` and configure a new MongoDB connection string, a unique `JWT_SECRET` with at least 32 random bytes, the public HTTPS frontend origin in `CLIENT_URL`, and `NODE_ENV=production`. Copy `client/.env.example` to `client/.env` and set `VITE_API_URL` to the public HTTPS API origin before building the client.
+The Render service serves both the API and the built client from one origin. Create one Render Web Service for the repository with the root directory left blank, build command `npm ci --prefix api && npm ci --include=dev --prefix client && npm run build --prefix client`, and start command `node api/index.js`.
 
-Rotate any database credentials previously used in a local environment. Never commit `.env` files. Deploy the built client and API behind HTTPS; production startup rejects non-HTTPS client origins and uses secure, HTTP-only session cookies.
+Set `NODE_ENV=production`, `MONGO_URL`, a unique `JWT_SECRET` with at least 32 random bytes, and `CLIENT_URL` to the exact HTTPS origin of the Render service. The client defaults its API and WebSocket URLs to the page origin in production. For local development, copy `client/.env.example` to `client/.env`; its `VITE_API_URL` points to the separately running local API.
+
+Never commit `.env` files. Rotate any database credentials previously used in a local environment. Render's free filesystem is temporary, so uploaded files may disappear after restarts or redeploys, and free services may sleep while idle.

@@ -67,6 +67,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type'],
 }));
 
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 200,
@@ -175,7 +177,7 @@ app.post('/login', requireTrustedOrigin, loginLimiter, async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      sameSite: isProduction ? 'none' : 'lax',
+      sameSite: 'lax',
       secure: isProduction,
       maxAge: TOKEN_TTL_SECONDS * 1000,
       path: '/',
@@ -190,7 +192,7 @@ app.post('/login', requireTrustedOrigin, loginLimiter, async (req, res) => {
 app.post('/logout', requireTrustedOrigin, (req, res) => {
   res.cookie('token', '', {
     httpOnly: true,
-    sameSite: isProduction ? 'none' : 'lax',
+    sameSite: 'lax',
     secure: isProduction,
     expires: new Date(0),
     path: '/',
@@ -219,7 +221,7 @@ app.post('/register', requireTrustedOrigin, registrationLimiter, async (req, res
 
     res.cookie('token', token, {
       httpOnly: true,
-      sameSite: isProduction ? 'none' : 'lax',
+      sameSite: 'lax',
       secure: isProduction,
       maxAge: TOKEN_TTL_SECONDS * 1000,
       path: '/',
